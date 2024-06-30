@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${raleway.className} min-h-screen `}>
+        <body className={`${raleway.className} min-h-screen flex flex-col`}>
           <LayoutProvider>{children}</LayoutProvider>
         </body>
       </html>
