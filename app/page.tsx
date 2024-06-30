@@ -1,9 +1,10 @@
 import Hero from "@/components/Hero";
+import LayoutProvider from "@/providers/LayoutProvider";
 
 const Home = () => {
   return (
     <div>
-      <Hero />
+    <LayoutProvider><Hero /></LayoutProvider> 
     </div>
   );
 };

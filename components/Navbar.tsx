@@ -1,8 +1,14 @@
 "use client";
-import { UserButton } from "@clerk/nextjs";
+import {  UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { MdQuiz } from "react-icons/md";
 import UserMenu from "./UserMenu";
+import {
+  
+  SignInButton,
+
+  SignedOut,
+} from "@clerk/nextjs";
 
 const Navbar = () => {
   return (
@@ -21,6 +27,11 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-5 justify-end">
+          <SignedOut>
+            {" "}
+            <SignInButton />
+          </SignedOut>
+
           <UserMenu />
           <UserButton />
         </div>
