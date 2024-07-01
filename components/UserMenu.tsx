@@ -19,18 +19,18 @@ const UserMenu = () => {
       onMouseEnter={() => setOpenUserMenu(true)}
       onMouseLeave={() => setOpenUserMenu(false)}
     >
-      <div className="relative">
+      <div className="relative ">
         {" "}
         <CgMenuGridO />
         {openUserMenu && (
-          <ul className="absolute bg-primary z-[99] top-7 sm:left-[-50px] left-[70px] p-3 text-white  rounded-md text-center">
+          <ul className="absolute bg-white border z-[99] top-7 sm:left-[-50px] left-[70px] p-3  text-sm rounded-md ">
             {links.map((link, index) => (
               <Link
                 key={index}
                 href={link.path}
                 onClick={() => setOpenUserMenu(false)}
               >
-                <li className="hover:underline">{link.name}</li>
+                <li className="hover:underline pb-3 box-border">{link.name}</li>
               </Link>
             ))}
           </ul>

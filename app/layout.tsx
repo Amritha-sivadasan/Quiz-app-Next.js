@@ -9,14 +9,13 @@ import {
 } from "@clerk/nextjs";
 import "./globals.css";
 
-
 const raleway = Raleway({
   subsets: ["latin"],
   weight: ["200", "300", "400", "500", "600", "700", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "CodeQuiz",
+  title: "BrainQuiz",
   description: "Weekly quiz question for developers",
 };
 

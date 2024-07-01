@@ -3,6 +3,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import StatCard from "./statCard";
+import { client } from "../sanity/lib/client";
 interface QuizPorbs {
   questions: {
     question: string;
@@ -136,23 +137,25 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
               <ul>
                 {answers.map((answer: string, index: number) => (
                   <li
-                    className={`cursor-pointer mb-5 py-3 rounded-md hover:bg-primary hover:text-white px-3  ${selectedAnswerIndex == index && "bg-primary text-white"}`}
+                    className={` cursor-pointer mb-5 py-3 border w-72 rounded-md px-3 hover:bg-primary hover:text-white ${selectedAnswerIndex === index ? "bg-blue-700 text-white" : "bg-gray-300"}`}
                     key={index}
                     onClick={() => onAnswerSelcted(answer, index)}
                   >
-                    <span>{answer}</span>
+                    <span>{String.fromCharCode(65 + index)}. </span>{" "}
+                    {/* Displaying A, B, C, D dynamically */}
+                    {answer}
                   </li>
                 ))}
               </ul>
               <button
                 onClick={nextQuestion}
                 disabled={!check}
-                className="font-bold cursor-pointer border"
+                className="font-bold cursor-pointer border bg-gray-400 px-3"
               >
                 {" "}
                 {activeQuestion == questions.length - 1
-                  ? "Finish"
-                  : "Next Question"}
+                  ? "Finish ➔"
+                  : "Next Question ➔"}
               </button>
             </div>
           </>
