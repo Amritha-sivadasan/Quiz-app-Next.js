@@ -3,7 +3,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import StatCard from "./statCard";
-import { client } from "../sanity/lib/client";
+import Confetti from "react-confetti";
 interface QuizPorbs {
   questions: {
     question: string;
@@ -28,6 +28,7 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
   });
   const [timeRemaining, setTimeRemaining] = useState(25);
   const [timmerRunning, setTimerRunning] = useState(false);
+  const [celebrateCompletion, setCelebrateCompletion] = useState(false);
 
   const { question, answers, correctAnswer } = questions[activeQuestion];
   useEffect(() => {
@@ -62,7 +63,7 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
       stopTimer();
     };
   }, []);
-  const onAnswerSelcted = (answer: string, index: number) => {
+  const onAnswerSelected = (answer: string, index: number) => {
     setCheck(true);
     setSelectedAnswerIndex(index);
     if (answer == correctAnswer) {
@@ -86,6 +87,7 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
       setActiveQuestion((prev) => prev + 1);
     } else {
       setShowResults(true);
+      setCelebrateCompletion(true);
       stopTimer();
       fetch("/api/quizResults", {
         method: "POST",
@@ -111,20 +113,24 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
         .catch((err) => {
           console.log("error occur", err);
         });
+      setTimeout(() => {
+        setCelebrateCompletion(false);
+      }, 8000);
     }
     setCheck(false);
     resetTimer();
     startTimer();
   };
   return (
-    <div className="min-h-[500px]">
+    <div className="min-h-[500px] relative">
+      {celebrateCompletion && <Confetti />} {/* Confetti animation */}
       <div className="max-w-[1500px] mx-auto w-[90%] flex justify-center py-10 flex-col">
         {!showResults ? (
           <>
             <div className="flex justify-between mb-10 items-center">
               <div className="bg-primary text-white px-4 rounded-md py-1">
                 <h2>
-                  Question :{activeQuestion + 1}
+                  Question: {activeQuestion + 1}
                   <span>/{questions.length}</span>
                 </h2>
               </div>
@@ -135,14 +141,17 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
             <div className="">
               <h3 className="mb-5 text-2xl font-bold">{question}</h3>
               <ul>
-                {answers.map((answer: string, index: number) => (
+                {answers.map((answer, index) => (
                   <li
-                    className={` cursor-pointer mb-5 py-3 border w-72 rounded-md px-3 hover:bg-primary hover:text-white ${selectedAnswerIndex === index ? "bg-blue-700 text-white" : "bg-gray-300"}`}
+                    className={`cursor-pointer mb-5 py-3 border w-72 rounded-md px-3 hover:bg-primary hover:text-white ${
+                      selectedAnswerIndex === index
+                        ? "bg-blue-700 text-white"
+                        : "bg-gray-300"
+                    }`}
                     key={index}
-                    onClick={() => onAnswerSelcted(answer, index)}
+                    onClick={() => onAnswerSelected(answer, index)}
                   >
-                    <span>{String.fromCharCode(65 + index)}. </span>{" "}
-                    {/* Displaying A, B, C, D dynamically */}
+                    <span>{String.fromCharCode(65 + index)}. </span>
                     {answer}
                   </li>
                 ))}
@@ -152,8 +161,7 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
                 disabled={!check}
                 className="font-bold cursor-pointer border bg-gray-400 px-3"
               >
-                {" "}
-                {activeQuestion == questions.length - 1
+                {activeQuestion === questions.length - 1
                   ? "Finish ➔"
                   : "Next Question ➔"}
               </button>
@@ -161,11 +169,11 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
           </>
         ) : (
           <div className="text-center">
-            <h3 className="text-2xl  uppercase mb-10">Results</h3>
+            <h3 className="text-2xl uppercase mb-10">Results</h3>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-10">
               <StatCard
                 title="Percentage"
-                value={`${(results.score / 50) * 100} %`}
+                value={`${((results.score / (questions.length * 5)) * 100).toFixed()}%`}
               />
               <StatCard title="Total Questions" value={questions.length} />
               <StatCard title="Total score" value={results.score} />
@@ -179,8 +187,8 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
               />
             </div>
             <button
-              onClick={() => window.location.reload()}
-              className="mt-10 font-bold uppercase"
+              onClick={() => window.location.reload()} // Reload the page to restart quiz
+              className="mt-10 font-bold uppercase border bg-gray-300 px-3 rounded hover:bg-slate-400"
             >
               Restart Quiz
             </button>
