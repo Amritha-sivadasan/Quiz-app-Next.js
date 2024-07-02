@@ -1,6 +1,7 @@
 "use server"
 import { prisma } from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 interface User {
   id: string;
@@ -18,7 +19,7 @@ export const fetchUsers = async () => {
    
     let mongoUser: User | null = await prisma.user.findUnique({
       where: {
-        clerkUserId: clerkUser?.id || undefined // Ensure clerkUser?.id is defined or pass undefined
+        clerkUserId: clerkUser?.id || undefined 
       }
     });
 
@@ -32,7 +33,7 @@ export const fetchUsers = async () => {
         username: username || "",
         email: clerkUser?.emailAddresses[0]?.emailAddress || "",
         profilePic: clerkUser?.imageUrl || "",
-        id: "", // Ensure all required fields are initialized
+        id: "", 
         createdAt: new Date(),
         updatedAt: new Date()
       };
@@ -54,8 +55,10 @@ export const fetchUsers = async () => {
         quizResults
       }
     };
+
   } catch (error) {
     console.log(error);
-    throw new Error("Failed to fetch user data");
+    redirect('/')
+    // throw new Error("Failed to fetch user data");
   }
 };

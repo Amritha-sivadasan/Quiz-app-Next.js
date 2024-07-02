@@ -1,5 +1,5 @@
 import React from "react";
-import StatCard from "../../components/statCard";
+import StatCard from "../../components/StatCard";
 import { fetchUsers } from "../(auth)/actions/fetchUsers";
 import LayoutProvider from "../../providers/LayoutProvider";
 const page = async() => {

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useEffect, useState } from "react";
-import StatCard from "./statCard";
+import StatCard from "./StatCard";
 import Confetti from "react-confetti";
 interface QuizPorbs {
   questions: {
@@ -187,7 +187,7 @@ const Quiz = ({ questions, userId }: QuizPorbs) => {
               />
             </div>
             <button
-              onClick={() => window.location.reload()} // Reload the page to restart quiz
+              onClick={() => window.location.reload()} 
               className="mt-10 font-bold uppercase border bg-gray-300 px-3 rounded hover:bg-slate-400"
             >
               Restart Quiz
